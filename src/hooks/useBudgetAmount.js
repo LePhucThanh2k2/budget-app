@@ -4,6 +4,7 @@ export default function useBudgetAmount() {
   let totalIncome = 0;
   let totalExpense = 0;
   const listData = useSelector((state) => state.listData);
+
   const listDataIncome = listData.filter((item) => item.amount > 0);
   const listDataExpense = listData.filter((item) => item.amount < 0);
 

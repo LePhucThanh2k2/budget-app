@@ -1,4 +1,4 @@
-import { ACT_ADD_INCOME, ACT_DELETE_ITEM } from "./actions";
+import { ACT_ADD_EXPENSE, ACT_ADD_INCOME, ACT_DELETE_ITEM } from "./actions";
 import { v4 as uuidv4 } from "uuid";
 let initState = {
   listData: [
@@ -27,7 +27,22 @@ let initState = {
 function reducer(state = initState, action) {
   switch (action.type) {
     case ACT_ADD_INCOME:
-      return state;
+      const newDataIN = {
+        id: uuidv4(),
+        description: action.payload.desc,
+        amount: action.payload.amount,
+      };
+      initState.listData.push(newDataIN);
+      return initState;
+
+    case ACT_ADD_EXPENSE:
+      const newDataEX = {
+        id: uuidv4(),
+        description: action.payload.desc,
+        amount: action.payload.amount * -1,
+      };
+      initState.listData.push(newDataEX);
+      return initState;
     case ACT_DELETE_ITEM:
       const idItemNeedDelete = action.payload.id;
       return (initState = {
