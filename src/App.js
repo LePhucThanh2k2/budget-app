@@ -1,10 +1,13 @@
-import Top from "./components/Top";
-import Bottom from "./components/Bottom";
+import BudgetForm from "./components/BudgetForm";
+import BudgetHeader from "./components/BudgetHeader";
+import BudgetList from "./components/BudgetList";
+
 function App() {
   return (
     <>
-      <Top />
-      <Bottom />
+      <BudgetHeader />
+      <BudgetForm />
+      <BudgetList />
     </>
   );
 }
