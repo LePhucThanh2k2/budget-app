@@ -29,6 +29,7 @@ function BudgetForm() {
   function handleAddItem() {
     {
       dispatch(actAddItem(valueSelect, valueDesc, valueAmount));
+      document.querySelector(".add__description").focus();
     }
     // RESET FORM
     setValueDesc("");
