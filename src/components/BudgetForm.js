@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { actAddExpense, actAddIncome } from "../store/actions";
+import { actAddExpense, actAddIncome, actAddItem } from "../store/actions";
 
 function BudgetForm() {
   // HOOK
@@ -27,10 +27,8 @@ function BudgetForm() {
     setValueAmount(parseInt(e.target.value));
   }
   function handleAddItem() {
-    if (valueSelect === "inc") {
-      dispatch(actAddIncome(valueDesc, valueAmount));
-    } else {
-      dispatch(actAddExpense(valueDesc, valueAmount));
+    {
+      dispatch(actAddItem(valueSelect, valueDesc, valueAmount));
     }
     // RESET FORM
     setValueDesc("");

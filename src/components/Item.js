@@ -6,10 +6,8 @@ import { actDeleteItem } from "../store/actions";
 function Item({ data, totalIncome }) {
   const { description, amount, id } = data;
   const dispatch = useDispatch();
-  const datas = useSelector((state) => state);
   function handlerDelete() {
     dispatch(actDeleteItem(id));
-    console.log(datas);
   }
   return (
     <>
