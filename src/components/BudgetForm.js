@@ -1,39 +1,55 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { actAddExpense, actAddIncome, actAddItem } from "../store/actions";
+import { v4 as uuidv4, v4 } from "uuid";
 
 function BudgetForm() {
-  // HOOK
-  const [valueSelect, setValueSelect] = useState("inc");
-  const [valueDesc, setValueDesc] = useState("");
-  const [valueAmount, setValueAmount] = useState("");
+  // HOOK, sign
+  const [formData, setFormData] = useState({
+    description: '',
+    amount: '',
+    sign: 'inc'
+  });
+
   const dispatch = useDispatch();
   // VARIABLE
-  let classInput = valueSelect === "inc" ? "" : "red-focus";
-  let classButton = valueSelect === "inc" ? "" : "red";
+  let classInput = formData.sign === "inc" ? "" : "red-focus";
+  let classButton = formData.sign === "inc" ? "" : "red";
   // FUNCTION
-  function handleSelect(e) {
-    setValueSelect(e.target.value);
+  function handleChange(e) {
+    console.log(formData);
+    const name = e.target.name;
+    let value = e.target.value;
+    if (name === 'amount') {
+      value = parseInt(value);
+    }
+    setFormData({ ...formData, [name]: value });
   }
+
   function handleKeyDown(e) {
     if (e.key === "Enter") {
       handleAddItem();
     }
   }
-  function handleInputDesc(e) {
-    setValueDesc(e.target.value);
-  }
-  function handleInputValue(e) {
-    setValueAmount(parseInt(e.target.value));
-  }
   function handleAddItem() {
-    {
-      dispatch(actAddItem(valueSelect, valueDesc, valueAmount));
-      document.querySelector(".add__description").focus();
+    if (!formData.description || !formData.amount) {
+      alert('please input desc or amount');
+      return;
     }
+
+    const item = {
+      id: v4(),
+      description: formData.description,
+      amount: formData.sign === 'inc' ? formData.amount : (-1 * formData.amount),
+    };
+    dispatch(actAddItem(item));
+    document.querySelector(".add__description").focus();
     // RESET FORM
-    setValueDesc("");
-    setValueAmount("");
+    setFormData({
+      description: '',
+      amount: 0,
+      sign: formData.sign
+    })
   }
   // RENDER
   return (
@@ -41,11 +57,10 @@ function BudgetForm() {
       <div className="add__container">
         <select
           className={`add__type ${classInput}`}
-          onChange={(e) => {
-            handleSelect(e);
-          }}
+          onChange={handleChange}
+          name="sign"
         >
-          <option value="inc" selected>
+          <option value="inc">
             +
           </option>
           <option value="exp">-</option>
@@ -54,16 +69,18 @@ function BudgetForm() {
           type="text"
           className={`add__description ${classInput}`}
           placeholder="Add description"
-          value={valueDesc}
-          onChange={(e) => handleInputDesc(e)}
+          value={formData.description}
+          onChange={handleChange}
+          name="description"
         />
         <input
           type="number"
           className={`add__value ${classInput}`}
           placeholder="Value"
-          value={valueAmount}
-          onKeyDown={(e) => handleKeyDown(e)}
-          onChange={(e) => handleInputValue(e)}
+          value={formData.amount}
+          onKeyDown={handleKeyDown}
+          onChange={handleChange}
+          name="amount"
         />
         <button className={`add__btn ${classButton}`} onClick={handleAddItem}>
           <i className="ion-ios-checkmark-outline" />

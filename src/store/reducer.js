@@ -7,28 +7,19 @@ let initState = {
 function reducer(state = initState, action) {
   switch (action.type) {
     case ACT_ADD_INCOME:
-      const num = action.payload.type === "inc" ? 1 : -1;
-      const newData = {
-        id: uuidv4(),
-        description: action.payload.desc,
-        amount: action.payload.amount * num,
-      };
-      state.listData.push(newData);
-      localStorage.setItem("dataBudget", JSON.stringify(state.listData));
-      return {
-        ...state,
-        listData: [...state.listData],
-      };
+      const newState = {...state, listData: [...state.listData, action.payload.item]};
+      localStorage.setItem("dataBudget", JSON.stringify(newState.listData));
+      return newState;
 
     case ACT_DELETE_ITEM:
       const idItemNeedDelete = action.payload.id;
-      state.listData = state.listData.filter(
+      const newListData = state.listData.filter(
         (item) => item.id !== idItemNeedDelete
       );
-      localStorage.setItem("dataBudget", JSON.stringify(state.listData));
+      localStorage.setItem("dataBudget", JSON.stringify(newListData));
       return {
         ...state,
-        listData: [...state.listData],
+        listData: newListData,
       };
     default:
       return state;
